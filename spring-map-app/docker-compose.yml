@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: mapapp-postgres
+    environment:
+      POSTGRES_DB: mapapp_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mapapp1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - mapapp_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mapapp_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mapapp_pgdata:
+    driver: local
